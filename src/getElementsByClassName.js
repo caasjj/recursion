@@ -6,4 +6,18 @@
 // But in stead we're going to implement it from scratch:
 var getElementsByClassName = function (className) {
   // your code here
+	var elem = document.body,
+		result = [];
+
+	(function walk( node ) {
+		if (node === null) return;
+		if ( _.toArray(node.classList).indexOf(className) > -1 ) {
+			result.push(node);
+		}
+		_.forEach( node.childNodes, function(childNode) {
+			walk(childNode);
+		})
+	})(elem);
+
+	return result;
 };
