@@ -4,50 +4,34 @@
 // but you don't so you're going to have to write it from scratch:
 var stringifyJSON = function ( obj ) {
 	// your code goes here
-	var result = '';
-	var reserved = ["functions", "undefined"];
-
-	return (function stringify ( param ) {
-
+	function stringify ( param ) {
+		var temp = '';
 		if ( param === null ) {
-			result += 'null,';
-			return result;
+			return 'null';
 		}
 		if ( typeof param === 'string' ) {
-			var temp = '"' + param + '",';
-			result += temp;
-			return result;
+			return  '"' + param + '"';
 		}
 		if ( typeof param === 'number' || typeof param === 'boolean' ) {
-			result += param + ',';
-			return result;
+			return param + '';
 		}
 		if ( Array.isArray( param ) ) {
-			result += '[';
 			for ( var i = 0; i < param.length; i++ ) {
-				stringify( param[i] );
+				temp += stringify( param[i] );
+				temp += (i < param.length - 1) ? ',' : '';
 			}
-			if ( param.length > 0 ) {
-				result = result.slice( 0, -1 );
-			}
-			result += '],';
-			return result;
+			return '[' + temp + ']';
 		} else {
-			result += '{';
-			var flag = false;
-			for ( var p in param ) {
-				if ( !( reserved.indexOf( p ) > -1) ) {
-					flag = true;
-					result += '"' + p + '":';
-					stringify( param[p] );
+			for ( var p = Object.keys( param ), l = 0; l < p.length; l++ ) {
+				if ( !( ["functions", "undefined"].indexOf( p[l] ) > -1) ) {
+					temp += '"' + p[l] + '":' + stringify( param[p[l]] );
+					temp += (l < p.length - 1) ? ',' : '';
 				}
 			}
-			if ( flag ) {
-				result = result.slice( 0, -1 );
-			}
-			result += '},';
-			return result;
+			return '{' + temp + '}';
 		}
-	})( obj ).slice( 0, -1 );
+	}
+
+	return stringify( obj );
 
 };
