@@ -6,8 +6,7 @@
 // But in stead we're going to implement it from scratch:
 var getElementsByClassName = function (className) {
   // your code here
-	var elem = document.body,
-		result = [];
+	var	result = [];
 
 	(function walk( node ) {
 		if (node === null) return;
@@ -17,7 +16,7 @@ var getElementsByClassName = function (className) {
 		_.forEach( node.childNodes, function(childNode) {
 			walk(childNode);
 		})
-	})(elem);
+	})(document.body);
 
 	return result;
 };
