@@ -23,6 +23,14 @@ var parseJSON = (function () {
             return [' ', '\t'].indexOf( c ) > -1;
         },
 
+        escapeChar = function( c ) {
+
+            switch(c) {
+                case '\\': return '\\' + getChar();
+                default: return c;
+            }
+        },
+
         readCh = function () {
             return jsonArray[0];
         },
@@ -70,7 +78,8 @@ var parseJSON = (function () {
             var string = '', c = '';
             while ( c !== '"' ) {
                 string += c;
-                c = getCh();
+                c = escapeChar( getCh() );
+
             }
             return string;
         },
@@ -128,10 +137,6 @@ var parseJSON = (function () {
                     return parseArray();
                 case '{':
                     return parseObject();
-                case ' ' :
-                    return parse();
-                case '\t' :
-                    return  parse();
                 default :
                     return isNum( thisChar ) ? parseNumber(thisChar) : parseReserved(thisChar);
             }
